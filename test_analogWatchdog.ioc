@@ -1,15 +1,21 @@
 #MicroXplorer Configuration settings - do not modify
 ADC1.Channel-1\#ChannelRegularConversion=ADC_CHANNEL_1
+ADC1.Channel-2\#ChannelRegularConversion=ADC_CHANNEL_2
+ADC1.Channel-3\#ChannelRegularConversion=ADC_CHANNEL_3
 ADC1.ContinuousConvMode=ENABLE
 ADC1.EOCSelection=ADC_EOC_SINGLE_CONV
 ADC1.EnableAnalogWatchDog=true
 ADC1.HighThreshold=2000
-ADC1.IPParameters=Rank-1\#ChannelRegularConversion,master,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,NbrOfConversionFlag,ScanConvMode,ContinuousConvMode,EOCSelection,NbrOfConversion,EnableAnalogWatchDog,WatchdogMode,HighThreshold,ITMode
+ADC1.IPParameters=Rank-1\#ChannelRegularConversion,master,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,NbrOfConversionFlag,ScanConvMode,ContinuousConvMode,EOCSelection,NbrOfConversion,EnableAnalogWatchDog,WatchdogMode,HighThreshold,ITMode,Rank-2\#ChannelRegularConversion,Channel-2\#ChannelRegularConversion,SamplingTime-2\#ChannelRegularConversion,Rank-3\#ChannelRegularConversion,Channel-3\#ChannelRegularConversion,SamplingTime-3\#ChannelRegularConversion
 ADC1.ITMode=ENABLE
-ADC1.NbrOfConversion=1
+ADC1.NbrOfConversion=3
 ADC1.NbrOfConversionFlag=1
 ADC1.Rank-1\#ChannelRegularConversion=1
+ADC1.Rank-2\#ChannelRegularConversion=2
+ADC1.Rank-3\#ChannelRegularConversion=3
 ADC1.SamplingTime-1\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
+ADC1.SamplingTime-2\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
+ADC1.SamplingTime-3\#ChannelRegularConversion=ADC_SAMPLETIME_3CYCLES
 ADC1.ScanConvMode=ENABLE
 ADC1.WatchdogMode=ADC_ANALOGWATCHDOG_ALL_REG
 ADC1.master=1

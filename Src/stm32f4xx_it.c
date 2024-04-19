@@ -199,5 +199,9 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /* USER CODE BEGIN 1 */
-
+void ADC_IRQHandler(void)
+{
+  extern ADC_HandleTypeDef hadc1;
+  HAL_ADC_IRQHandler(&hadc1);
+}
 /* USER CODE END 1 */
