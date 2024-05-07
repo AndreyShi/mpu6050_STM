@@ -65,6 +65,9 @@ void Error_Handler(void);
 #define red_GPIO_Port GPIOD
 #define blue_Pin GPIO_PIN_15
 #define blue_GPIO_Port GPIOD
+#define dmp_ready_Pin GPIO_PIN_8
+#define dmp_ready_GPIO_Port GPIOB
+#define dmp_ready_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 
