@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "MPU6050.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,6 +116,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   uint32_t channels[3] = {ADC_CHANNEL_1,ADC_CHANNEL_2,ADC_CHANNEL_3};
   int i = 0;
+  I2Cdev_init(&hi2c1);
+  MPU6050_initialize();
+  if(MPU6050_testConnection() == true)
+      { HAL_GPIO_WritePin(GPIOD, orange_Pin, GPIO_PIN_RESET);}
   while (1)
   {
         /*
