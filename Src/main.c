@@ -130,7 +130,8 @@ int main(void)
       { printf("MPU6050 connection successful\n");}
   else
       { printf("MPU6050 connection failed\n");}
-
+int16_t ax, ay, az;
+int16_t gx, gy, gz;
   while (1)
   {
         /*
@@ -143,6 +144,10 @@ int main(void)
             {i++;}
         else
             {i = 0;}
+
+        MPU6050_getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+        printf("%d %d %d %d %d %d\n",ax, ay, az,gx, gy, gz);
+        HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
