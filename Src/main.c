@@ -57,6 +57,22 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+  uint8_t adc_code[1000];
+  uint16_t adc_data[1000];
+  uint32_t ADC_SR_REG[1000];
+  uint32_t ADC_CR2_REG[1000];
+
+int inc_adc_test = 0;
+#define set_test_adc(x,y,z,w)                  \
+if(inc_adc_test < 1000)                    \
+   {                                       \
+    adc_code[inc_adc_test] = x;   \
+    adc_data[inc_adc_test] = y;   \
+    ADC_SR_REG[inc_adc_test] = z; \
+    ADC_CR2_REG[inc_adc_test] = w;  \
+    inc_adc_test++;                        \
+   }                                       \
+
 /* USER CODE END 0 */
 
 /**
@@ -94,8 +110,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint32_t channels[3] = {ADC_CHANNEL_1,ADC_CHANNEL_2,ADC_CHANNEL_3};
+  int i = 0;
   while (1)
   {
+        hadc1.Instance->CR1 &= ~ADC_CR1_AWDCH;
+        hadc1.Instance->CR1 |= (uint32_t)((uint16_t)(channels[i]));
+        if(i < 2)
+            {i++;}
+        else
+            {i = 0;}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -170,7 +194,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
@@ -188,10 +212,11 @@ static void MX_ADC1_Init(void)
 
   /** Configure the analog watchdog
   */
-  AnalogWDGConfig.WatchdogMode = ADC_ANALOGWATCHDOG_ALL_REG;
-  AnalogWDGConfig.HighThreshold = 100;
+  AnalogWDGConfig.WatchdogMode = ADC_ANALOGWATCHDOG_SINGLE_REG;
+  AnalogWDGConfig.HighThreshold = 4000;
   AnalogWDGConfig.LowThreshold = 0;
   AnalogWDGConfig.ITMode = ENABLE;
+  AnalogWDGConfig.Channel = ADC_CHANNEL_1;
   if (HAL_ADC_AnalogWDGConfig(&hadc1, &AnalogWDGConfig) != HAL_OK)
   {
     Error_Handler();
@@ -201,7 +226,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_1;
   sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -211,6 +236,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_2;
   sConfig.Rank = 2;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -220,6 +246,7 @@ static void MX_ADC1_Init(void)
   */
   sConfig.Channel = ADC_CHANNEL_3;
   sConfig.Rank = 3;
+  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -259,27 +286,33 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
-
+uint32_t time_stamp = 0;
 /* USER CODE BEGIN 4 */
 void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef *hadc)
 {
   __asm("nop");
   HAL_GPIO_WritePin(GPIOD, green_Pin, GPIO_PIN_RESET);
+  set_test_adc('g',HAL_ADC_GetValue(hadc),hadc->Instance->SR,hadc->Instance->CR2);
+   time_stamp++;
 }
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
 {
   HAL_GPIO_WritePin(GPIOD, red_Pin, GPIO_PIN_RESET);
   __asm("nop");
+  set_test_adc('r',HAL_ADC_GetValue(hadc),hadc->Instance->SR,hadc->Instance->CR2);
 }
 void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
   HAL_GPIO_WritePin(GPIOD, orange_Pin, GPIO_PIN_RESET);
   __asm("nop");
+  set_test_adc('o',HAL_ADC_GetValue(hadc),hadc->Instance->SR,hadc->Instance->CR2);
 }
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
   HAL_GPIO_WritePin(GPIOD, blue_Pin, GPIO_PIN_RESET);
   __asm("nop");
+  set_test_adc('b',HAL_ADC_GetValue(hadc),hadc->Instance->SR,hadc->Instance->CR2);
 }
 /* USER CODE END 4 */
 

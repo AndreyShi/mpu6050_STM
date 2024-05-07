@@ -1107,7 +1107,7 @@ HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef *hadc)
     __HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_EOC | ADC_FLAG_OVR);
 
     /* Enable end of conversion interrupt for regular group */
-    __HAL_ADC_ENABLE_IT(hadc, (ADC_IT_EOC | ADC_IT_OVR));
+    //__HAL_ADC_ENABLE_IT(hadc, (ADC_IT_EOC | ADC_IT_OVR)); // что не было прерываний EOC
 
     /* Check if Multimode enabled */
     if (HAL_IS_BIT_CLR(tmpADC_Common->CCR, ADC_CCR_MULTI))
@@ -1983,6 +1983,7 @@ static void ADC_Init(ADC_HandleTypeDef *hadc)
   /* Enable or disable ADC end of conversion selection */
   hadc->Instance->CR2 &= ~(ADC_CR2_EOCS);
   hadc->Instance->CR2 |= ADC_CR2_EOCSelection(hadc->Init.EOCSelection);
+  hadc->Instance->CR2 &= ~(ADC_CR2_EOCS);// что не было прерываний EOC
 }
 
 /**
